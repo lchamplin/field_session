@@ -1,8 +1,12 @@
-from people.person import Person
+from sqlalchemy import Column, ForeignKey, Integer, Table, String
+from sqlalchemy.orm import declarative_base, relationship
+Base = declarative_base()
 
+class Programmer(Base):
+    __tablename__ = "programmer"
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String(250))
+    last_name = Column(String(250))
+    years_of_experience = Column(Integer)
+    company_id = Column(Integer, ForeignKey("company.id"))
 
-class Programmer(Person):
-
-    def __init__(self, first_name: str, last_name: str, years_of_experience: int) -> None:
-        super().__init__(first_name=first_name, last_name=last_name)
-        self.years_of_experience: int = years_of_experience

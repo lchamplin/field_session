@@ -1,7 +1,10 @@
-class Person:
+from sqlalchemy import Column, ForeignKey, Integer, Table, String
+from sqlalchemy.orm import declarative_base, relationship
+Base = declarative_base()
 
-    def __init__(self,
-                 first_name: str,
-                 last_name: str) -> None:
-        self.first_name: str = first_name
-        self.last_name: str = last_name
+class Person():
+    __tablename__ = "person"
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String(250))
+    last_name = Column(String(250))
+
