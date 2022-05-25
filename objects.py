@@ -18,10 +18,6 @@ client_company_association_table = Table("client_company_association",Base.metad
     Column("client_id", ForeignKey("client.id"), primary_key=True),
     Column("company_id", ForeignKey("company.id"), primary_key=True),
 )
-client_betatest_association_table = Table("client_betatest_association",Base.metadata,
-    Column("client_id", ForeignKey("client.id"), primary_key=True),
-    Column("betatest_id", ForeignKey("betatest.id"), primary_key=True),
-)
 betatest_user_association_table = Table("betatest_user_association",Base.metadata,
     Column("betatest_id", ForeignKey("betatest.id"), primary_key=True),
     Column("user_id", ForeignKey("user.id"), primary_key=True),
@@ -66,9 +62,7 @@ class Client(Base):
     first_name = Column(String)
     last_name = Column(String)
     companies = relationship("Company", secondary=client_company_association_table, back_populates="clients", cascade="all, delete")
-    betatests = relationship("BetaTest", secondary=client_betatest_association_table, back_populates="clients", cascade="all, delete")
     demos = relationship("Demo", secondary=demo_client_association_table, back_populates="clients", cascade="all, delete")
-
 
 class Salesperson(Base):
     __tablename__ = "salesperson"
@@ -99,7 +93,6 @@ class BetaTest(Base):
     start_time = Column(DateTime)
     end_time = Column(DateTime)
     users = relationship("User", secondary=betatest_user_association_table, back_populates="betatests", cascade="all, delete")
-    clients = relationship("Client", secondary=client_betatest_association_table, back_populates="betatests", cascade="all, delete")
     project_id = Column(Integer, ForeignKey("project.id"))
     company_id = Column(Integer, ForeignKey("company.id"))
 
