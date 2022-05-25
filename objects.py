@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, Table, String, Boolean, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, Table, String, Boolean, DateTime, create_engine
 from geoalchemy2 import Geometry
 from sqlalchemy.orm import declarative_base, relationship
 
@@ -95,7 +95,7 @@ class User(Base):
 class BetaTest(Base):
     __tablename__ = "betatest"
     id = Column(Integer, primary_key=True)
-    location = Column(Geometry('POINT'))
+    location = Column(Geometry(geometry_type='POINT'))
     start_time = Column(DateTime)
     end_time = Column(DateTime)
     users = relationship("User", secondary=betatest_user_association_table, back_populates="betatests")
@@ -107,7 +107,7 @@ class BetaTest(Base):
 class Demo(Base):
     __tablename__ = "demo"
     id = Column(Integer, primary_key=True)
-    location = Column(Geometry('POINT'))
+    location = Column(Geometry(geometry_type='POINT'))
     start_time = Column(DateTime)
     end_time = Column(DateTime)
     salespeople = relationship("Salesperson", secondary=demo_salesperson_association_table, back_populates="demos")
@@ -118,7 +118,7 @@ class Demo(Base):
 class OnSiteSupport(Base):
     __tablename__ = "onsitesupport"
     id = Column(Integer, primary_key=True)
-    location = Column(Geometry('POINT'))
+    location = Column(Geometry(geometry_type='POINT'))
     start_time = Column(DateTime)
     end_time = Column(DateTime)
     fixed_problem = Column(Boolean)
@@ -158,4 +158,7 @@ class Project(Base):
     betatests = relationship("BetaTest")
     demos = relationship("Demo")
     onesitesupports = relationship("OnSiteSupport")
+
+# OTHER ###########################################################
+
 
