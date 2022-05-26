@@ -26,8 +26,8 @@ def main():
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
 
-        generator = Generator(engine, N_companies=10, N_betatests=1, N_demos=3, N_onsitesupports=1,
-         N_clients=20, N_programmers=20, N_salesperson=10, N_users=50, N_projects=30)
+        generator = Generator(engine, N_companies=10, N_betatests=3, N_demos=3, N_onsitesupports=3,
+         N_clients=20, N_programmers=30, N_salesperson=10, N_users=50, N_projects=15)
         generator.genAll()
 
         

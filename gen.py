@@ -4,6 +4,7 @@ from sqlalchemy.sql import text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
 from shapely.geometry import Point
+from tensorboard import program
 from objects import *
 
 
@@ -39,7 +40,7 @@ class Generator():
      
         def genProgrammers(self):
                 for i in range(int(self.N_programmers)):
-                        p = Programmer(first_name="fp"+str(i), last_name="lp"+str(i), years_of_experience=i % 7, company_id=random.randint(1, self.N_companies-1))
+                        p = Programmer(first_name="fp"+str(i), last_name="lp"+str(i), years_of_experience=(i % 11)+1, company_id=random.randint(1, self.N_companies))
                         self.session.add(p)
                 self.session.commit()
                 #projects has programmer list
@@ -71,19 +72,23 @@ class Generator():
                 #betatests has users list
 
         def genProjects(self):
-                for i in range(int(self.N_programmers)):
-                        company=random.randint(1, self.N_companies-1)
-                        companies = self.session.query(Company)
-                        programmers = companies[company].programmers
-                        num_programmers = random.randint(0, len(programmers))
-                        ps = random.sample(programmers, num_programmers)
+                for i in range(int(self.N_projects)):
+                        company=random.randint(1, self.N_companies)
+                        companies = list(self.session.query(Company))
+                        programmers = companies[company-1].programmers
 
-                        us = random.sample(list(self.session.query(User)), random.randint(0, self.N_users/2))
+                        if(len(programmers)==0):
+                                project_programmers = []
+                        else:
+                                num_programmers = random.randint(0, len(programmers)-1)
+                                project_programmers = random.sample(programmers, num_programmers)
 
+                        us = random.sample(list(self.session.query(User)), random.randint(0, int(self.N_users/4)))
+                      
                         languages=["Java", "Python", "Go", "Rust"]
                         lang = languages[random.randint(0, len(languages)-1)]
         
-                        p = Project(programmers=ps, users=us, language=lang, in_production=bool(random.getrandbits(1)),
+                        p = Project(programmers=project_programmers, users=us, language=lang, in_production=bool(random.getrandbits(1)),
                          description="project"+str(i), company_id=company)
                         self.session.add(p)
                 self.session.commit()
@@ -93,13 +98,16 @@ class Generator():
         def genBetaTests(self):
                 for i in range(int(self.N_betatests)):
                         project=random.randint(1, self.N_projects)
-                        projects = self.session.query(Project)
-                        print("\n\n\nproject id is", project)
+                        projects = list(self.session.query(Project))
                         p = projects[project-1]
+                        company = p.company_id
+
                         users = list(p.users)
-                        num_users = random.randint(0, len(users))
-                        us = random.sample(users, num_users)
-                        company = projects[project-1].company_id
+                        if(len(users)==0):
+                                us = []
+                        else:
+                                num_users = random.randint(0, len(users)-1)
+                                us = random.sample(users, num_users)
 
                         b = BetaTest(location = None,
                         start_time=datetime.fromtimestamp(random.randint(int(datetime.today().timestamp()), int(datetime.today().timestamp()) + 86400)), 
@@ -115,18 +123,24 @@ class Generator():
         def genDemos(self):
                 for i in range(int(self.N_demos)):
                         project=random.randint(1, self.N_projects)
-
-                        projects = self.session.query(Project)
-                        print("\n\n\nproject id is", project)
+                        projects = list(self.session.query(Project))
                         p = projects[project-1]
-
                         company = p.company_id
 
-                        companies = self.session.query(Company)
-                        cs = random.sample(companies[company-1].clients, random.randint(0, 6))
+                        companies = list(self.session.query(Company))
+                        clients = companies[company-1].clients
+                        if(len(clients)==0):
+                                cs = []
+                        else:
+                                num_clients = random.randint(0, len(clients)-1)
+                                cs = random.sample(clients, num_clients)
 
-                        salespeople = self.session.query(Salesperson)
-                        sp = random.sample(salespeople, random.randint(0, 4))
+                        salespeople = list(self.session.query(Salesperson))
+                        if(len(salespeople)==0):
+                                sp = []
+                        else:
+                                num_salespeople = random.randint(0, len(salespeople)-1)
+                                sp = random.sample(salespeople, num_salespeople)
 
                         d = Demo(location=None, 
                         start_time=datetime.fromtimestamp(random.randint(int(datetime.today().timestamp()), int(datetime.today().timestamp()) + 86400)), 
@@ -142,12 +156,16 @@ class Generator():
         def genOnSiteSupports(self):
                 for i in range(int(self.N_onsitesupports)):
                         project=random.randint(1, self.N_projects)
-                        projects = self.session.query(Project)
-                        print("\n\n\nproject id is", project)
+                        projects = list(self.session.query(Project))
                         p = projects[project-1]
-
                         company = p.company_id
-                        ps = random.sample(projects[project-1].programmers, random.randint(0, 3))
+
+                        programmers = p.programmers
+                        if(len(programmers)==0):
+                                ps = []
+                        else:
+                                num_programmers = random.randint(0, len(programmers)-1)
+                                ps = random.sample(programmers, num_programmers)
 
                         o = OnSiteSupport(location = None,
                         start_time=datetime.fromtimestamp(random.randint(int(datetime.today().timestamp()), int(datetime.today().timestamp()) + 86400)), 
