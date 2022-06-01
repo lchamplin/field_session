@@ -4,6 +4,7 @@ from sqlalchemy.sql import text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
 from shapely.geometry import Point
+import geoalchemy2
 from tensorboard import program
 from objects import *
 
@@ -80,10 +81,12 @@ class Generator():
                         if(len(programmers)==0):
                                 project_programmers = []
                         else:
-                                num_programmers = random.randint(0, len(programmers)-1)
+                                num_programmers = len(programmers)+1
+                                while num_programmers > len(programmers):
+                                        num_programmers = random.randint(1, 10)
                                 project_programmers = random.sample(programmers, num_programmers)
 
-                        us = random.sample(list(self.session.query(User)), random.randint(0, int(self.N_users/4)))
+                        us = random.sample(list(self.session.query(User)), random.randint(0, 500))
                       
                         languages=["Java", "Python", "Go", "Rust"]
                         lang = languages[random.randint(0, len(languages)-1)]
