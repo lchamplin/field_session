@@ -5,13 +5,12 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
 from shapely.geometry import Point
 import geoalchemy2
-from tensorboard import program
 from objects import *
 
 
 class Generator():
         def __init__(self, engine: Engine, N_companies: int, N_betatests: int, N_demos: int, N_onsitesupports: int,
-         N_clients: int, N_programmers: int, N_salesperson: int, N_users: int, N_projects: int) -> None:
+         N_clients: int, N_programmers: int, N_salesperson: int, N_users: int, N_projects: int, iteration: int) -> None:
                 self.engine = Engine
                 self.N_companies = N_companies
                 self.N_betatests = N_betatests
@@ -24,15 +23,16 @@ class Generator():
                 self.N_projects = N_projects
                 Session = sessionmaker(engine)  
                 self.session = Session()
+                self.iteration = iteration
            
         def genPeople(self):
-                for i in range(int(self.N_companies)):
+                for i in range(self.iteration*self.N_companies, (self.iteration+1)*self.N_companies):
                         p = Person(first_name="fpr"+str(i), last_name="lpr"+str(i))
                         self.session.add(p)
                 self.session.commit()
 
         def genCompanies(self):
-                for i in range(int(self.N_companies)):
+                for i in range(self.iteration*self.N_companies, (self.iteration+1)*self.N_companies):
                         c = Company(name="C"+str(i), ceo=i+1, description="company"+str(i))
                         self.session.add(c)
                 self.session.commit()
@@ -40,7 +40,7 @@ class Generator():
                 #betatests, demos, onsitesupports have company id
      
         def genProgrammers(self):
-                for i in range(int(self.N_programmers)):
+                for i in range(self.iteration*self.N_programmers, (self.iteration+1)*self.N_programmers):
                         p = Programmer(first_name="fp"+str(i), last_name="lp"+str(i), years_of_experience=(i % 11)+1, company_id=random.randint(1, self.N_companies))
                         self.session.add(p)
                 self.session.commit()
@@ -50,7 +50,7 @@ class Generator():
         def genClients(self):
                 companies = self.session.query(Company)
                 cs = random.sample(list(companies), random.randint(0, 6))
-                for i in range(int(self.N_clients)):
+                for i in range(self.iteration*self.N_clients, (self.iteration+1)*self.N_clients):
                         c = Client(first_name="fc"+str(i), last_name="lc"+str(i), companies=cs)
                         self.session.add(c)
                 self.session.commit()
@@ -58,14 +58,14 @@ class Generator():
                 #demos has client list
 
         def genSalespeople(self):
-                for i in range(int(self.N_salesperson)):
+                for i in range(self.iteration*self.N_salesperson, (self.iteration+1)*self.N_salesperson):
                         s = Salesperson(first_name="fs"+str(i), last_name="ls"+str(i), trustworthy=bool(random.getrandbits(1)))
                         self.session.add(s)
                 self.session.commit()
                 #demos has salespeople list
 
         def genUsers(self):
-                for i in range(int(self.N_users)):
+                for i in range(self.iteration*self.N_users, (self.iteration+1)*self.N_users):
                         u = User(first_name="fs"+str(i), last_name="ls"+str(i), age=random.randint(5, 99))
                         self.session.add(u)
                 self.session.commit()
@@ -73,8 +73,8 @@ class Generator():
                 #betatests has users list
 
         def genProjects(self):
-                for i in range(int(self.N_projects)):
-                        company=random.randint(1, self.N_companies)
+                for i in range(self.iteration*self.N_projects, (self.iteration+1)*self.N_projects):
+                        company=random.randint(1, (self.iteration+1)*self.N_companies)
                         companies = list(self.session.query(Company))
                         programmers = companies[company-1].programmers
 
@@ -99,8 +99,8 @@ class Generator():
 
 
         def genBetaTests(self):
-                for i in range(int(self.N_betatests)):
-                        project=random.randint(1, self.N_projects)
+                for i in range(self.iteration*self.N_betatests, (self.iteration+1)*self.N_betatests):
+                        project=random.randint(1, (self.iteration+1)*self.N_projects)
                         projects = list(self.session.query(Project))
                         p = projects[project-1]
                         company = p.company_id
@@ -124,8 +124,8 @@ class Generator():
 
         
         def genDemos(self):
-                for i in range(int(self.N_demos)):
-                        project=random.randint(1, self.N_projects)
+                for i in range(self.iteration*self.N_demos, (self.iteration+1)*self.N_demos):
+                        project=random.randint(1, (self.iteration+1)*self.N_projects)
                         projects = list(self.session.query(Project))
                         p = projects[project-1]
                         company = p.company_id
@@ -157,8 +157,8 @@ class Generator():
                 self.session.commit()    
 
         def genOnSiteSupports(self):
-                for i in range(int(self.N_onsitesupports)):
-                        project=random.randint(1, self.N_projects)
+                for i in range(self.iteration*self.N_onsitesupports, (self.iteration+1)*self.N_onsitesupports):
+                        project=random.randint(1, (self.iteration+1)*self.N_projects)
                         projects = list(self.session.query(Project))
                         p = projects[project-1]
                         company = p.company_id
