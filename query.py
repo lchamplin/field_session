@@ -36,14 +36,19 @@ def main():
         times = []
         n_repeats = 100
         for query in queries:
-                for :
+                print(query)
+                total = 0
+                for _ in range(n_repeats):
                         textual_sql = text(query)
                         start = time.time()
                         session.execute(textual_sql)
                         end = time.time()
-                        times.append(end - start)
-                        
-        print(times)
+                        total+=(end - start)
+                times.append(total*1000/n_repeats)
+        i = 1
+        for t in times:
+                print("query", i, t)
+                i+=1
 
 
 
