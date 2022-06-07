@@ -67,7 +67,7 @@ queryTimesDict = {
 }
 
 df = pd.DataFrame(queryTimesDict)
-df.head()
+print(df.head())
   
 
 

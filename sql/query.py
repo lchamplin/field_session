@@ -10,8 +10,8 @@ import psycopg2
 
 
 def main():
-        engine = create_engine('postgresql://postgres:mypassword@fsdatabase.ch2bjjecacbc.us-west-2.rds.amazonaws.com:8080/postgres')#, echo=True)
-        # engine = create_engine('postgresql://postgres:mypassword@fsdatabase1.ch2bjjecacbc.us-west-2.rds.amazonaws.com:8080/postgres')#, echo=True)
+        # engine = create_engine('postgresql://postgres:mypassword@fsdatabase.ch2bjjecacbc.us-west-2.rds.amazonaws.com:8080/postgres')#, echo=True)
+        engine = create_engine('postgresql://postgres:mypassword@fsdatabase1.ch2bjjecacbc.us-west-2.rds.amazonaws.com:8080/postgres')#, echo=True)
         # engine = create_engine('postgresql://postgres:mypassword@fsdatabase2.ch2bjjecacbc.us-west-2.rds.amazonaws.com:8080/postgres')#, echo=True)
 
         Session = sessionmaker(engine)  
@@ -53,3 +53,35 @@ def main():
 
 
 main()
+
+
+
+#  10k database results, 6/7
+# query 1 57.539870738983154
+# query 2 50.044236183166504
+# query 3 213.95848512649536
+# query 4 51.65649890899658
+# query 5 70.52381992340088
+# query 6 58.43841314315796
+# query 7 53.07670831680298
+# query 8 154.30482864379883
+# query 9 167.08465576171875
+# query 10 68.11129331588745
+# query 11 449.52423572540283
+# query 12 83.14294338226318
+
+
+
+#  100k database results
+# query 1 67.45977640151978
+# query 2 54.423439502716064
+# query 3 9614.941718578339
+# query 4 55.69192886352539
+# query 5 735.3175497055054
+# query 6 51.61729574203491
+# query 7 53.112971782684326
+# query 8 52.757487297058105
+# query 9 791.3985705375671
+# query 10 252.70577907562256
+# query 11 4150.944991111755
+# query 12 2303.4826970100403
