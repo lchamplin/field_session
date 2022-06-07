@@ -66,7 +66,7 @@ class Generator():
 
         def genUsers(self):
                 for i in range(self.iteration*self.N_users, (self.iteration+1)*self.N_users):
-                        u = User(first_name="fs"+str(i), last_name="ls"+str(i), age=random.randint(5, 99))
+                        u = User_p(first_name="fs"+str(i), last_name="ls"+str(i), age=random.randint(5, 99))
                         self.session.add(u)
                 self.session.commit()
                 #projects has users list
@@ -86,7 +86,7 @@ class Generator():
                                         num_programmers = random.randint(1, 10)
                                 project_programmers = random.sample(programmers, num_programmers)
 
-                        us = random.sample(list(self.session.query(User)), random.randint(0, 500))
+                        us = random.sample(list(self.session.query(User_p)), random.randint(0, 500))
                       
                         languages=["Java", "Python", "Go", "Rust"]
                         lang = languages[random.randint(0, len(languages)-1)]

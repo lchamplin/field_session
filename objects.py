@@ -12,7 +12,7 @@ project_programmer_association_table = Table("project_programmer_association",Ba
 )
 project_user_association_table = Table("project_user_association",Base.metadata,
     Column("project_id", ForeignKey("project.id"), primary_key=True),
-    Column("user_id", ForeignKey("user.id"), primary_key=True),
+    Column("user_id", ForeignKey("user_p.id"), primary_key=True),
 )
 client_company_association_table = Table("client_company_association",Base.metadata,
     Column("client_id", ForeignKey("client.id"), primary_key=True),
@@ -20,7 +20,7 @@ client_company_association_table = Table("client_company_association",Base.metad
 )
 betatest_user_association_table = Table("betatest_user_association",Base.metadata,
     Column("betatest_id", ForeignKey("betatest.id"), primary_key=True),
-    Column("user_id", ForeignKey("user.id"), primary_key=True),
+    Column("user_id", ForeignKey("user_p.id"), primary_key=True),
 )
 demo_salesperson_association_table = Table("demo_salesperson_association",Base.metadata,
     Column("demo_id", ForeignKey("demo.id"), primary_key=True),
@@ -72,8 +72,8 @@ class Salesperson(Base):
     trustworthy = Column(Boolean)
     demos = relationship("Demo", secondary=demo_salesperson_association_table, back_populates="salespeople", cascade="all, delete")
 
-class User(Base):
-    __tablename__ = "user"
+class User_p(Base):
+    __tablename__ = "user_p"
     id = Column(Integer, primary_key=True)
     first_name = Column(String)
     last_name = Column(String)
@@ -92,7 +92,7 @@ class BetaTest(Base):
     location = Column(Geometry(geometry_type='POINT'))
     start_time = Column(DateTime)
     end_time = Column(DateTime)
-    users = relationship("User", secondary=betatest_user_association_table, back_populates="betatests", cascade="all, delete")
+    users = relationship("User_p", secondary=betatest_user_association_table, back_populates="betatests", cascade="all, delete")
     project_id = Column(Integer, ForeignKey("project.id"))
     company_id = Column(Integer, ForeignKey("company.id"))
 
@@ -143,7 +143,7 @@ class Project(Base):
     __tablename__ = "project"
     id = Column(Integer, primary_key=True)
     programmers = relationship("Programmer", secondary=project_programmer_association_table, back_populates="projects", cascade="all, delete")
-    users = relationship("User", secondary=project_user_association_table, back_populates="projects", cascade="all, delete")
+    users = relationship("User_p", secondary=project_user_association_table, back_populates="projects", cascade="all, delete")
     language = Column(String) # Java, Python, Go, Rust
     in_production = Column(Boolean)
     description = Column(String)
