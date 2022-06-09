@@ -12,7 +12,6 @@ import psycopg2
 def main():
         # engine = create_engine('postgresql://postgres:mypassword@fsdatabase.ch2bjjecacbc.us-west-2.rds.amazonaws.com:8080/postgres')#, echo=True)
         engine = create_engine('postgresql://postgres:mypassword@fsdatabase1.ch2bjjecacbc.us-west-2.rds.amazonaws.com:8080/postgres')#, echo=True)
-        # engine = create_engine('postgresql://postgres:mypassword@fsdatabase2.ch2bjjecacbc.us-west-2.rds.amazonaws.com:8080/postgres')#, echo=True)
 
         Session = sessionmaker(engine)  
         session = Session()

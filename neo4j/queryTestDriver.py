@@ -14,9 +14,9 @@ import pandas as pd
 import os
 import time
 
-localConnection = Neo4jConnection(uri="bolt://localhost:11010", user="gstookey", pwd="@Collin0820")
-driver = GraphDatabase.driver('bolt://localhost:11010', auth=('gstookey', '@Collin0820'))
-path = "/home/gstookey/ICR/fieldSession/app-python/api/neo4jDB_demo/data"
+localConnection = Neo4jConnection(uri="bolt://localhost:7687", user="lchamplin", pwd="password")
+driver = GraphDatabase.driver('bolt://localhost:7687', auth=('lchamplin', 'password'))
+path = "/Users/lchamplin/Library/CloudStorage/OneDrive-ColoradoSchoolofMines/CSCI370/mines-field-session/data"
 
 os.chdir(path) 
 
@@ -67,7 +67,7 @@ queryTimesDict = {
 }
 
 df = pd.DataFrame(queryTimesDict)
-print(df.head())
+print(df.head(13))
   
 
 
