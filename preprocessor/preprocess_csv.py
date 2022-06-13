@@ -4,6 +4,7 @@ uid_offset = 0
 #PERSON
 df = pandas.read_csv('csv/person.csv')
 df = df.rename(columns={"id": "uid"})
+df["dgraph.type"] = "Person"
 
 uid_offset += df.shape[0]
 df.to_csv('person.csv', index=False)  
@@ -11,6 +12,7 @@ df.to_csv('person.csv', index=False)
 #COMPANY
 df = pandas.read_csv('csv/company.csv')
 df = df.rename(columns={"id": "uid"})
+df["dgraph.type"] = "Company"
 df["uid"] = df["uid"] + uid_offset
 uid_offset_company = uid_offset
 #ceo id stays same because person uid
@@ -20,6 +22,7 @@ df.to_csv('company.csv', index=False)
 #PROGRAMMER
 df = pandas.read_csv('csv/programmer.csv')
 df = df.rename(columns={"id": "uid"})
+df["dgraph.type"] = "Programmer"
 df["uid"] = df["uid"] + uid_offset
 uid_offset_programmer = uid_offset
 df["company_id"] = df["company_id"] + uid_offset_company
@@ -30,6 +33,7 @@ df.to_csv('programmer.csv', index=False)
 
 #USER
 df = pandas.read_csv('csv/user_p.csv')
+df["dgraph.type"] = "User"
 df = df.rename(columns={"id": "uid"})
 df["uid"] = df["uid"] + uid_offset
 uid_offset_user = uid_offset
@@ -39,6 +43,7 @@ df.to_csv('user_p.csv', index=False)
 
 #CLIENT
 df = pandas.read_csv('csv/clients.csv')
+df["dgraph.type"] = "Client"
 df = df.rename(columns={"id": "uid"})
 df["uid"] = df["uid"] + uid_offset
 uid_offset_client = uid_offset
@@ -48,6 +53,7 @@ df.to_csv('client.csv', index=False)
 
 #SALESPERSON
 df = pandas.read_csv('csv/salesperson.csv')
+df["dgraph.type"] = "Salesperson"
 df = df.rename(columns={"id": "uid"})
 df["uid"] = df["uid"] + uid_offset
 uid_offset_salesperson = uid_offset
@@ -57,6 +63,7 @@ df.to_csv('salesperson.csv', index=False)
 
 #PROJECT
 df = pandas.read_csv('csv/project.csv')
+df["dgraph.type"] = "Project"
 df = df.rename(columns={"id": "uid"})
 df["uid"] = df["uid"] + uid_offset
 uid_offset_project = uid_offset
@@ -69,6 +76,7 @@ df.to_csv('project.csv', index=False)
 
 #BETATEST
 df = pandas.read_csv('csv/betatest.csv')
+df["dgraph.type"] = "Betatest"
 df = df.rename(columns={"id": "uid"})
 df["uid"] = df["uid"] + uid_offset
 uid_offset_betatest = uid_offset
@@ -83,6 +91,7 @@ df.to_csv('betatest.csv', index=False)
 
 #DEMO
 df = pandas.read_csv('csv/demo.csv')
+df["dgraph.type"] = "Demo"
 df = df.rename(columns={"id": "uid"})
 df["uid"] = df["uid"] + uid_offset
 uid_offset_demo = uid_offset
@@ -97,6 +106,7 @@ df.to_csv('demo.csv', index=False)
 
 #ONSITESUPPORT
 df = pandas.read_csv('csv/onsitesupport.csv')
+df["dgraph.type"] = "Onsitesupport"
 df = df.rename(columns={"id": "uid"})
 df["uid"] = df["uid"] + uid_offset
 uid_offset_onsitesupport = uid_offset
@@ -117,7 +127,7 @@ df = df.rename(columns={"betatest_id": "uid"})
 df = df.rename(columns={"user_id": "uid"})
 df.to_csv('betatest_user_association.csv', index=False) 
 
-#CLIENT_COMPANY
+#CLIENT-COMPANY
 df = pandas.read_csv('csv/client_company_association.csv')
 df["client_id"] = df["client_id"] + uid_offset_client
 df["company_id"] = df["company_id"] + uid_offset_company
