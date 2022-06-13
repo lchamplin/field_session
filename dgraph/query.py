@@ -1,4 +1,5 @@
 import json
+import time
 import pydgraph
 
 
@@ -94,7 +95,10 @@ for query in queries:
                 # txn(read_only=True, best_effort=True)
                 txn = client.txn(read_only=True)
                 try:
+                        start = time.time()
                         res = txn.query(query)
+                        end = time.time()
+                        total+=(end - start)
                         print('Response: {}'.format(json.loads(res.json)))
                 except pydgraph.AbortedError:
                         print("error")
