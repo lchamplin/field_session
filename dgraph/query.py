@@ -1,16 +1,16 @@
 import json
-import time
 import pydgraph
+import time
 
 
 queries = [
 """{
-query1(func: allofterms(firstName, “fp210”)) {
+query1(func: allofterms(first_name, "fp210")) {
         works_for { name }
         }
 }""",
 """{
-query2(func: allofterms(name, “C80”) {
+query2(func: allofterms(name, "C80")) {
         ~works_for { first_name }
 	}
 }""",
@@ -57,6 +57,21 @@ query7(func: uid(0x2ae)) @cascade @normalize {
         }
 }
 }""",
+"""{ 
+var(func: has(belongs_to)) @filter (allofterms(language, "Rust")) {
+	rust_demos as ~demoing
+}
+  
+var(func: has(trustworthy)) @filter (eq(trustworthy, true)) {
+	~presented_by {
+		good_rust_demos as demoing @filter (uid(rust_demos))
+  }
+}
+  
+query8(func: uid(good_rust_demos)) {
+		count(~attends)
+  }
+}""",
 """{
 query9(func: allofterms(name, "C492")) @cascade @normalize {
 		~belongs_to @filter (allofterms(language, "Rust")) {
@@ -74,6 +89,24 @@ query9(func: allofterms(name, "C492")) @cascade @normalize {
 query10(func: uid(0x21c8)) @cascade {
         count(designed_for)
 }
+}""", 
+"""{
+query11(func: uid(0xd17)) {
+        ~designed_for {
+		description
+        }
+}
+}""", 
+"""{     
+var(func: has(headed_by)) {
+	dim_projects as ~belongs_to @filter (anyofterms(language, "Java Python") and eq(in_production, true))
+}
+    
+query12(func: has(handled_by)) @filter (gt(count(managed_by), 2)) {
+	provided_for @filter (uid(dim_projects)) {
+		description
+  }
+  }
 }"""
 
 ]
@@ -86,7 +119,7 @@ client = pydgraph.DgraphClient(client_stub)
 
 
 times = []
-n_repeats = 1
+n_repeats = 100
 for query in queries:
         print(query)
         total = 0
@@ -99,7 +132,7 @@ for query in queries:
                         res = txn.query(query)
                         end = time.time()
                         total+=(end - start)
-                        print('Response: {}'.format(json.loads(res.json)))
+                        # print('Response: {}'.format(json.loads(res.json)))
                 except pydgraph.AbortedError:
                         print("error")
                 finally:
